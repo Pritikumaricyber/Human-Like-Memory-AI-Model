@@ -3,63 +3,75 @@ from backend.app.models.memory import Memory
 from backend.app.memory.retrieval_engine import retrieve_memories
 from backend.app.memory.consolidation_engine import consolidate_memory
 from backend.app.memory.decision_engine import make_memory_decision
-from backend.app.memory.belief_updater import update_belief
 from backend.app.memory.reconsolidation_engine import reconsolidate_memory
-from backend.app.models.belief import Belief
-from backend.app.models.evidence import Evidence
+from backend.app.memory.belief_builder import build_belief
+
+from backend.app.storage.memory_store import MemoryStore
+from backend.app.storage.belief_store import BeliefStore
+from backend.app.storage.evidence_store import EvidenceStore
+from backend.app.storage.history_store import HistoryStore
+
+from backend.app.knowledge.knowledge_manager import KnowledgeManager
+
 
 class MemoryManager:
+    """
+    Main controller of the Human-Like Memory system.
+    """
 
     def __init__(self):
-        """
-        Main controller of the Human-Like Memory system.
-        """
-        pass
-       
+
+        self.memory_store = MemoryStore()
+        self.belief_store = BeliefStore()
+        self.evidence_store = EvidenceStore()
+        self.history_store = HistoryStore()
+        self.knowledge_manager = KnowledgeManager()
 
     def process_memory(
         self,
-        new_memory: Memory,
-        stored_memories: list[Memory]
+        new_memory: Memory
     ):
 
-        # Step 1
+        # -----------------------------------------
+        # Step 1 : Retrieve similar memories
+        # -----------------------------------------
+
         retrieved = retrieve_memories(
             query=new_memory.content,
-            memories=stored_memories
+            memories=self.memory_store.get_all()
         )
 
-        # Step 2
+        # -----------------------------------------
+        # Step 2 : Consolidate
+        # -----------------------------------------
+
         consolidation = consolidate_memory(
             new_memory,
             [item["memory"] for item in retrieved]
         )
 
-        # Step 3
+        # -----------------------------------------
+        # Step 3 : Decide
+        # -----------------------------------------
+
         decision = make_memory_decision(
             consolidation
         )
+        # -----------------------------------------
+# Step 4 : Store Memory
+# -----------------------------------------
 
-        # Step 4
-        target = decision["target"]
+        if decision["action"] == "store_new":
+             self.memory_store.add(new_memory)
 
-        if target is not None:
+# -----------------------------------------
+# Step 5 : Process Knowledge
+# -----------------------------------------
 
-            if decision["action"] in (
-                "strengthen_belief",
-                "revise_belief"
-            ):
-                print("Updating belief...") 
-                print("Target memory:", target.content)
-
-            elif decision["action"] == "update_memory":
-                print("Reconsolidating memory...")
-
-            elif decision["action"] == "ignore":
-                print("Duplicate memory ignored.")
-
-        else:
-            print("Storing new memory...")
+        self.knowledge_manager.process_knowledge(
+            new_memory,
+            decision
+)
 
         return {
             "retrieved": retrieved,

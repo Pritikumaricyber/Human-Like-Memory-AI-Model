@@ -36,11 +36,12 @@ new_memory = Memory(
 )
 
 manager = MemoryManager()
+#Sprint(type(manager.belief_store).__name__)
 
-result = manager.process_memory(
-    new_memory,
-    stored_memories
-)
+for memory in stored_memories:
+    manager.memory_store.add(memory)
+
+result = manager.process_memory(new_memory)
 
 print("\n==============================")
 print("MEMORY MANAGER")
