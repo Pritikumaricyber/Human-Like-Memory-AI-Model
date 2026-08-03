@@ -2,11 +2,11 @@ from datetime import datetime
 from typing import List, Optional
 
 from pydantic import BaseModel, Field
-
+from uuid import uuid4
 
 class Memory(BaseModel):
     # Identity
-    id: Optional[str] = None
+    id: str = Field(default_factory=lambda: str(uuid4()))
     user_id: str
 
     # Content
@@ -39,5 +39,5 @@ class Memory(BaseModel):
 
     recall_count: int = 0
 
-    created_at: datetime = Field(default_factory=datetime.now)
+    
     belief_id: str | None = None

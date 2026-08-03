@@ -8,10 +8,6 @@ from backend.app.memory.belief_history_manager import (
     record_belief_change,
 )
 
-from backend.app.storage.belief_store import BeliefStore
-from backend.app.storage.evidence_store import EvidenceStore
-from backend.app.storage.history_store import HistoryStore
-
 
 class KnowledgeManager:
     """
@@ -23,13 +19,15 @@ class KnowledgeManager:
     - Creating evidence
     - Recording belief history
     """
-
-    def __init__(self):
-
-        self.belief_store = BeliefStore()
-        self.evidence_store = EvidenceStore()
-        self.history_store = HistoryStore()
-
+    def __init__(
+    self,
+    belief_store,
+    evidence_store,
+    history_store
+):
+      self.belief_store = belief_store
+      self.evidence_store = evidence_store
+      self.history_store = history_store
     def process_knowledge(
         self,
         memory: Memory,
