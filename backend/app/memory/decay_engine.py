@@ -36,7 +36,10 @@ def reinforce_memory(
     )
 def apply_decay(memory):
     """
-    Apply decay directly to a Memory object.
+    Apply human-like forgetting to a Memory object.
+
+    Memories with high importance, emotion,
+    confidence, or recall frequency decay slower.
     """
 
     if memory.last_recalled is not None:
@@ -48,9 +51,22 @@ def apply_decay(memory):
             datetime.now() - memory.created_at
         ).days
 
+    # Protection factors
+    protection = (
+        memory.importance * 0.35
+        + memory.emotional_score * 0.25
+        + memory.confidence * 0.20
+        + min(memory.recall_count, 10) * 0.02
+    )
+
+    effective_decay_rate = max(
+        0.001,
+        memory.decay_rate * (1 - protection)
+    )
+
     memory.strength = calculate_decay(
         strength=memory.strength,
-        decay_rate=memory.decay_rate,
+        decay_rate=effective_decay_rate,
         days_since_recall=days_since
     )
 
