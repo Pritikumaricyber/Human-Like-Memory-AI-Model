@@ -1,23 +1,18 @@
 from backend.app.models.memory import Memory
-
 from backend.app.memory.retrieval_engine import retrieve_memories
 from backend.app.memory.consolidation_engine import consolidate_memory
 from backend.app.memory.decision_engine import make_memory_decision
-
 from backend.app.memory.reflection_engine import reflect
-
 from backend.app.storage.memory_store import MemoryStore
 from backend.app.storage.belief_store import BeliefStore
 from backend.app.storage.evidence_store import EvidenceStore
 from backend.app.storage.history_store import HistoryStore
-
 from backend.app.knowledge.knowledge_manager import KnowledgeManager
-
 from backend.app.storage.relationship_store import RelationshipStore
-
 from backend.app.memory.relationship_engine import detect_relationship
 from backend.app.memory.relationship_builder import build_relationship
-
+from backend.app.graph.belief_graph import BeliefGraph
+from backend.app.graph.graph_retriever import retrieve_related_memories
 
 class MemoryManager:
     """
@@ -31,6 +26,7 @@ class MemoryManager:
         self.evidence_store = EvidenceStore()
         self.history_store = HistoryStore()
         self.relationship_store = RelationshipStore()
+        self.graph = BeliefGraph()
 
         self.knowledge_manager = KnowledgeManager(
             belief_store=self.belief_store,
@@ -52,6 +48,26 @@ class MemoryManager:
             query=new_memory.content,
             memories=self.memory_store.get_all()
         )
+        # Graph Retrieval
+        
+        graph_memories = retrieve_related_memories(
+            graph=self.graph,
+            memories=self.memory_store.get_all(),
+            start_subject=new_memory.content,
+            max_depth=2
+            )
+        existing_ids = {
+            item["memory"].id
+            for item in retrieved
+            }
+        for memory in graph_memories:
+            if memory.id not in existing_ids:
+                retrieved.append(
+                    {
+                        "memory": memory,
+                        "retrieval_score": 0.6
+                        }
+                        )
 
         # -----------------------------------------
         # Step 2 : Consolidate
@@ -94,6 +110,12 @@ class MemoryManager:
                     strength
                     )
                 self.relationship_store.add(relationship)
+                self.graph.add_relationship(
+                    new_memory.content,
+                    existing_memory.content,
+                    relationship_type,
+                    strength
+                    )
                 print(
                     f"Relationship created "
                     f"({relationship_type}, {strength:.2f})"
