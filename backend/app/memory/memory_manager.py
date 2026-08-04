@@ -13,6 +13,7 @@ from backend.app.memory.relationship_engine import detect_relationship
 from backend.app.memory.relationship_builder import build_relationship
 from backend.app.graph.belief_graph import BeliefGraph
 from backend.app.graph.graph_retriever import retrieve_related_memories
+from backend.app.memory.dream_engine import run_dream_cycle
 
 class MemoryManager:
     """
@@ -49,7 +50,7 @@ class MemoryManager:
             memories=self.memory_store.get_all()
         )
         # Graph Retrieval
-        
+
         graph_memories = retrieve_related_memories(
             graph=self.graph,
             memories=self.memory_store.get_all(),
@@ -90,8 +91,8 @@ class MemoryManager:
         # Step 4 : Store Memory
         # -----------------------------------------
 
-        if decision["action"] == "store_new":
-            self.memory_store.add(new_memory)
+        self.memory_store.add(new_memory)
+        
 
          # Step 5 : Build Relationships   
 
@@ -151,6 +152,16 @@ class MemoryManager:
                     "Reflection learned:",
                     belief.belief
                 )
+                # Step 8 : Dream Cycle
+               
+                if self.memory_store.count() >= 5:
+                    dream_beliefs = run_dream_cycle(
+                        self.memory_store.get_all(),
+                        user_id=new_memory.user_id
+                        )
+                    self.knowledge_manager.store_dream_beliefs(
+                        dream_beliefs
+                        )
 
         # -----------------------------------------
         # Return Pipeline Result

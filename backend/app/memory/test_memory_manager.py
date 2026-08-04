@@ -23,6 +23,26 @@ stored_memories = [
         strength=0.5,
         emotional_score=0.1,
     ),
+
+    Memory(
+        user_id="user_001",
+        content="I enjoy building AI projects.",
+        memory_type="fact",
+        importance=0.8,
+        confidence=0.9,
+        strength=0.8,
+        emotional_score=0.2,
+    ),
+
+    Memory(
+        user_id="user_001",
+        content="FastAPI is useful for backend APIs.",
+        memory_type="fact",
+        importance=0.7,
+        confidence=0.9,
+        strength=0.7,
+        emotional_score=0.2,
+    ),
 ]
 
 new_memory = Memory(

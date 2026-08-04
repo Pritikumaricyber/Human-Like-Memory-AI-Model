@@ -1,5 +1,4 @@
 from backend.app.models.memory import Memory
-from backend.app.models.belief import Belief
 
 from backend.app.memory.belief_builder import build_belief
 from backend.app.memory.evidence_builder import build_evidence
@@ -19,19 +18,22 @@ class KnowledgeManager:
     - Creating evidence
     - Recording belief history
     """
+
     def __init__(
-    self,
-    belief_store,
-    evidence_store,
-    history_store
-):
-      self.belief_store = belief_store
-      self.evidence_store = evidence_store
-      self.history_store = history_store
+        self,
+        belief_store,
+        evidence_store,
+        history_store,
+    ):
+
+        self.belief_store = belief_store
+        self.evidence_store = evidence_store
+        self.history_store = history_store
+
     def process_knowledge(
         self,
         memory: Memory,
-        decision: dict
+        decision: dict,
     ) -> None:
 
         action = decision["action"]
@@ -66,7 +68,7 @@ class KnowledgeManager:
 
         if action not in (
             "strengthen_belief",
-            "revise_belief"
+            "revise_belief",
         ):
             return
 
@@ -95,14 +97,14 @@ class KnowledgeManager:
 
         evidence = build_evidence(
             memory,
-            relationship
+            relationship,
         )
 
         self.evidence_store.add(evidence)
 
         updated_belief = update_belief(
             belief,
-            evidence
+            evidence,
         )
 
         self.belief_store.update(updated_belief)
@@ -110,9 +112,32 @@ class KnowledgeManager:
         history = record_belief_change(
             old_belief,
             updated_belief,
-            evidence
+            evidence,
         )
 
         self.history_store.add(history)
 
         print("Belief updated.")
+
+    def store_dream_beliefs(
+        self,
+        beliefs,
+    ):
+        """
+        Store beliefs generated during the dream cycle.
+        Avoid storing duplicate beliefs.
+        """
+
+        for belief in beliefs:
+
+            existing = self.belief_store.find_by_subject(
+                belief.subject
+            )
+
+            if existing is None:
+
+                self.belief_store.add(belief)
+
+                print(
+                    f"Dream learned: {belief.belief}"
+                )
