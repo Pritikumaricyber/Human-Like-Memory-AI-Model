@@ -6,7 +6,7 @@ from backend.app.models.memory import Memory
 
 def cosine_similarity(
     vector_a: list[float],
-    vector_b: list[float]
+    vector_b: list[float],
 ) -> float:
 
     a = np.array(vector_a)
@@ -27,7 +27,7 @@ def cosine_similarity(
 
 def calculate_retrieval_score(
     semantic_similarity: float,
-    memory: Memory
+    memory: Memory,
 ) -> float:
 
     score = (
@@ -40,14 +40,14 @@ def calculate_retrieval_score(
 
     return round(
         min(1.0, max(0.0, score)),
-        4
+        4,
     )
 
 
 def retrieve_memories(
     query: str,
     memories: list[Memory],
-    top_k: int = 5
+    top_k: int = 5,
 ):
 
     query_embedding = generate_embedding(query)
@@ -56,19 +56,19 @@ def retrieve_memories(
 
     for memory in memories:
 
-       if memory.embedding is None:
-        memory.embedding = generate_embedding(
-        memory.content
-    )
+        if memory.embedding is None:
+            memory.embedding = generate_embedding(
+                memory.content
+            )
 
         similarity = cosine_similarity(
             query_embedding,
-            memory.embedding
+            memory.embedding,
         )
 
         score = calculate_retrieval_score(
             similarity,
-            memory
+            memory,
         )
 
         results.append(
@@ -76,15 +76,15 @@ def retrieve_memories(
                 "memory": memory,
                 "semantic_similarity": round(
                     similarity,
-                    4
+                    4,
                 ),
-                "retrieval_score": score
+                "retrieval_score": score,
             }
         )
 
     results.sort(
         key=lambda item: item["retrieval_score"],
-        reverse=True
+        reverse=True,
     )
 
     return results[:top_k]

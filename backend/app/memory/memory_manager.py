@@ -66,29 +66,23 @@ class MemoryManager:
         # Graph Retrieval
         # -----------------------------------------
 
-        graph_memories = retrieve_related_memories(
-            graph=self.graph,
+        from backend.app.memory.retrieval_pipeline import (
+            run_retrieval_pipeline,
+            )
+        #print("Memory Count:", self.memory_store.count())
+        #for m in self.memory_store.get_all():
+            #print(">", m.content)
+        retrieved = run_retrieval_pipeline(
+            query=new_memory.content,
             memories=self.memory_store.get_all(),
-            start_subject=new_memory.content,
-            max_depth=2
-        )
-
-        existing_ids = {
-            item["memory"].id
-            for item in retrieved
-        }
-
-        for memory in graph_memories:
-
-            if memory.id not in existing_ids:
-
-                retrieved.append(
-                    {
-                        "memory": memory,
-                        "retrieval_score": 0.6
-                    }
-                )
-
+            graph=self.graph,
+            )
+        #print("Retrieved:", len(retrieved))
+        #print("Memory Count:", self.memory_store.count())
+        #print("All memories:")
+        #for m in self.memory_store.get_all():
+            #print("-", m.content)
+            #print("Retrieved:", len(retrieved))
         # -----------------------------------------
         # Step 2 : Consolidate
         # -----------------------------------------
@@ -162,11 +156,11 @@ class MemoryManager:
         # Step 7 : Reasoning
         # -----------------------------------------
 
-        print("Entering Reasoning Phase")
+        #print("Entering Reasoning Phase")
 
         for belief in self.belief_store.get_all():
 
-            print("Reasoning about:", belief.subject)
+            #print("Reasoning about:", belief.subject)
 
             self.reasoning_manager.process_reasoning(
                 belief,
