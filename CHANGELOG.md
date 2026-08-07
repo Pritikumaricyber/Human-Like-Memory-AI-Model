@@ -4,7 +4,78 @@ All notable changes to the **Human-Like-Memory AI Model** project are documented
 
 ---
 
+## v2.1.0 – Emotion-Aware Dream Replay
+
+### Added
+- Dream priority calculation for memory replay
+- Emotion-aware memory replay during dream cycles
+- Integration of `EmotionStore` with the Dream Engine
+- Emotion-aware replay support in the Replay Engine
+- Emotion-aware dream processing in `MemoryManager`
+- Dream priority tests
+- Emotion-aware replay tests
+
+### Improved
+- Dream replay now prioritizes memories using:
+  - Memory strength
+  - Memory importance
+  - Emotional significance
+  - Emotional intensity
+- High-intensity emotional memories can receive higher replay priority
+- Dream cycles now use emotional context when selecting memories for replay
+
+---
+
+## v2.0.0 – Emotion-Aware Memory Processing
+
+### Added
+- Emotion model
+- Rule-based emotion detector
+- Emotion store
+- Emotion engine
+- Emotion-aware retrieval
+- Emotion integration into `MemoryManager`
+- Emotion detector tests
+- Emotion engine tests
+- Emotion store tests
+- Emotion model tests
+
+### Improved
+- Retrieval now considers emotional intensity, valence, and arousal
+- Memory importance is dynamically adjusted based on detected emotions
+- High-arousal memories decay more slowly
+- Memory pipeline now performs emotion detection before retrieval
+
+### Architecture
+
+    Memory
+        ↓
+    Emotion Detection
+        ↓
+    Emotion Engine
+        ↓
+    Emotion Store
+        ↓
+    Retrieval
+        ↓
+    Consolidation
+        ↓
+    Decision
+        ↓
+    Knowledge
+        ↓
+    Reasoning
+        ↓
+    Reflection
+        ↓
+    Dream Learning
+        ↓
+    Adaptive Forgetting
+
+---
+
 ## v1.9.0 – Adaptive Forgetting & Memory Lifecycle
+
 **Date:** August 2026
 
 ### Added
@@ -20,7 +91,12 @@ All notable changes to the **Human-Like-Memory AI Model** project are documented
   - Active memories
   - Dormant memories
   - Forgotten memories
-- Human-like forgetting based on importance, emotion, recall frequency, and age
+- Human-like forgetting based on:
+  - Importance
+  - Emotional significance
+  - Recall frequency
+  - Memory age
+  - Memory strength
 
 ---
 
@@ -35,6 +111,7 @@ All notable changes to the **Human-Like-Memory AI Model** project are documented
 
 ### Improved
 - Combined semantic search with graph-based search
+- Hybrid retrieval now combines vector similarity and memory relationships
 
 ---
 
@@ -49,6 +126,7 @@ All notable changes to the **Human-Like-Memory AI Model** project are documented
 
 ### Improved
 - Automatic abstraction of repeated concepts into semantic beliefs
+- Repeated memory patterns can be generalized into higher-level knowledge
 
 ---
 
@@ -63,6 +141,7 @@ All notable changes to the **Human-Like-Memory AI Model** project are documented
 ### Improved
 - Dynamic belief confidence adjustment
 - Cognitive reasoning support
+- Belief-based reasoning over new memories
 
 ---
 
@@ -75,6 +154,7 @@ All notable changes to the **Human-Like-Memory AI Model** project are documented
 
 ### Improved
 - Offline learning through simulated dream cycles
+- Strong memories can be replayed during dream processing
 
 ---
 
@@ -86,6 +166,7 @@ All notable changes to the **Human-Like-Memory AI Model** project are documented
 
 ### Improved
 - Long-term knowledge formation from memories
+- Reflection can derive higher-level beliefs from stored memories
 
 ---
 
@@ -100,6 +181,7 @@ All notable changes to the **Human-Like-Memory AI Model** project are documented
 
 ### Improved
 - Connected memories through relationship graphs
+- Graph-based memory relationships
 
 ---
 
@@ -113,6 +195,8 @@ All notable changes to the **Human-Like-Memory AI Model** project are documented
 
 ### Improved
 - Knowledge evolution from memories
+- Evidence-based belief management
+- Historical tracking of knowledge changes
 
 ---
 
@@ -123,7 +207,9 @@ All notable changes to the **Human-Like-Memory AI Model** project are documented
 - Decision Engine
 
 ### Improved
-- Intelligent memory merging and conflict resolution
+- Intelligent memory merging
+- Memory conflict resolution
+- Decisions based on relationships between memories
 
 ---
 
@@ -137,60 +223,12 @@ All notable changes to the **Human-Like-Memory AI Model** project are documented
 - Basic Memory Manager
 - Vector-based semantic retrieval
 
----
+### Initial Architecture
 
-## Upcoming (v2.0.0)
-
-Planned Features:
-- Emotion-Aware Memory
-- Emotion Detection
-- Emotional Retrieval
-- Emotional Forgetting
-- Emotional Reasoning
-- Emotion-Based Dream Processing
-
-# v2.0.0 – Emotion-Aware Memory Processing
-
-## Added
-- Emotion model
-- Rule-based emotion detector
-- Emotion store
-- Emotion engine
-- Emotion-aware retrieval
-- Emotion integration into MemoryManager
-- Emotion detector test
-- Emotion engine test
-- Emotion store test
-- Emotion model test
-
-## Improved
-- Retrieval now considers emotional intensity, valence, and arousal
-- Memory importance is dynamically adjusted based on detected emotions
-- High-arousal memories decay more slowly
-- Memory pipeline now performs emotion detection before retrieval
-
-## Architecture
-
-Memory
-    ↓
-Emotion Detection
-    ↓
-Emotion Engine
-    ↓
-Emotion Store
-    ↓
-Retrieval
-    ↓
-Consolidation
-    ↓
-Decision
-    ↓
-Knowledge
-    ↓
-Reasoning
-    ↓
-Reflection
-    ↓
-Dream Learning
-    ↓
-Adaptive Forgetting
+    Memory
+        ↓
+    Embedding
+        ↓
+    Semantic Retrieval
+        ↓
+    Memory Manager
