@@ -231,7 +231,8 @@ class MemoryManager:
 
             dream_beliefs = run_dream_cycle(
                 self.memory_store.get_all(),
-                user_id=new_memory.user_id
+                user_id=new_memory.user_id,
+                emotion_store=self.emotion_store,
             )
 
             self.knowledge_manager.store_dream_beliefs(
