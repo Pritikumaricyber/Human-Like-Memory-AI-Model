@@ -148,3 +148,49 @@ Planned Features:
 - Emotional Forgetting
 - Emotional Reasoning
 - Emotion-Based Dream Processing
+
+# v2.0.0 – Emotion-Aware Memory Processing
+
+## Added
+- Emotion model
+- Rule-based emotion detector
+- Emotion store
+- Emotion engine
+- Emotion-aware retrieval
+- Emotion integration into MemoryManager
+- Emotion detector test
+- Emotion engine test
+- Emotion store test
+- Emotion model test
+
+## Improved
+- Retrieval now considers emotional intensity, valence, and arousal
+- Memory importance is dynamically adjusted based on detected emotions
+- High-arousal memories decay more slowly
+- Memory pipeline now performs emotion detection before retrieval
+
+## Architecture
+
+Memory
+    ↓
+Emotion Detection
+    ↓
+Emotion Engine
+    ↓
+Emotion Store
+    ↓
+Retrieval
+    ↓
+Consolidation
+    ↓
+Decision
+    ↓
+Knowledge
+    ↓
+Reasoning
+    ↓
+Reflection
+    ↓
+Dream Learning
+    ↓
+Adaptive Forgetting
