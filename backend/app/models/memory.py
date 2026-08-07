@@ -17,7 +17,7 @@ class Memory(BaseModel):
     importance: float = Field(default=0.5, ge=0.0, le=1.0)
     emotional_score: float = Field(default=0.0, ge=0.0, le=1.0)
     confidence: float = Field(default=0.5, ge=0.0, le=1.0)
-    frequency: int = Field(default=1, ge=1)
+    frequency: int = Field(default=0, ge=0)
 
     # Memory lifecycle
     strength: float = Field(default=0.5, ge=0.0, le=1.0)

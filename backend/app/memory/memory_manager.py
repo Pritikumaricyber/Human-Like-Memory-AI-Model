@@ -24,7 +24,9 @@ from backend.app.memory.dream_engine import run_dream_cycle
 from backend.app.memory.reasoning_manager import (
     ReasoningManager,
 )
-
+from backend.app.memory.forgetting_manager import (
+    ForgettingManager,
+)
 
 class MemoryManager:
     """
@@ -39,6 +41,7 @@ class MemoryManager:
         self.history_store = HistoryStore()
         self.relationship_store = RelationshipStore()
         self.graph = BeliefGraph()
+        
 
         self.knowledge_manager = KnowledgeManager(
             belief_store=self.belief_store,
@@ -47,6 +50,7 @@ class MemoryManager:
         )
 
         self.reasoning_manager = ReasoningManager()
+        self.forgetting_manager = ForgettingManager()
 
     def process_memory(
         self,
@@ -202,6 +206,15 @@ class MemoryManager:
             self.knowledge_manager.store_dream_beliefs(
                 dream_beliefs
             )
+
+            # Step 10 : Adaptive Forgetting
+            for memory in self.memory_store.get_all():
+                updated = self.forgetting_manager.process_memory(
+                    memory
+                    )
+                print(
+                    f"Forgetting: {updated.content} -> {updated.status}"
+                    )
 
         # -----------------------------------------
         # Return Pipeline Result
