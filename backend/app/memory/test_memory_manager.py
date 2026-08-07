@@ -1,5 +1,7 @@
 from backend.app.models.memory import Memory
 from backend.app.memory.memory_manager import MemoryManager
+from backend.app.memory.emotion_detector import detect_emotion
+from backend.app.memory.emotion_engine import apply_emotion
 
 
 stored_memories = [
@@ -59,6 +61,18 @@ manager = MemoryManager()
 #Sprint(type(manager.belief_store).__name__)
 
 for memory in stored_memories:
+    emotion = detect_emotion(
+        user_id=memory.user_id,
+        memory_id=memory.id,
+        text=memory.content,
+    )
+
+    manager.emotion_store.add(emotion)
+
+    memory = apply_emotion(
+        memory,
+        emotion,
+    )
     manager.memory_store.add(memory)
 
 result = manager.process_memory(new_memory)

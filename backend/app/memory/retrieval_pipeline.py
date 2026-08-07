@@ -19,6 +19,7 @@ def run_retrieval_pipeline(
     retrieved = retrieve_memories(
         query=query,
         memories=memories,
+        emotion_store=None,
     )
     # Debug
     # print(f"Vector retrieval: {len(retrieved)}")

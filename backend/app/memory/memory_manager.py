@@ -27,6 +27,10 @@ from backend.app.memory.reasoning_manager import (
 from backend.app.memory.forgetting_manager import (
     ForgettingManager,
 )
+from backend.app.memory.emotion_detector import detect_emotion
+from backend.app.memory.emotion_engine import apply_emotion
+from backend.app.storage.emotion_store import EmotionStore
+
 
 class MemoryManager:
     """
@@ -41,6 +45,7 @@ class MemoryManager:
         self.history_store = HistoryStore()
         self.relationship_store = RelationshipStore()
         self.graph = BeliefGraph()
+        self.emotion_store = EmotionStore()
         
 
         self.knowledge_manager = KnowledgeManager(
@@ -56,6 +61,31 @@ class MemoryManager:
         self,
         new_memory: Memory
     ):
+        # -----------------------------------------
+        # Emotion Detection
+        # -----------------------------------------
+        emotion = detect_emotion(
+            user_id=new_memory.user_id,
+            memory_id=new_memory.id,
+            text=new_memory.content,
+            )
+        self.emotion_store.add(emotion)
+        new_memory = apply_emotion(
+            new_memory,
+            emotion,
+            )
+        print(
+            f"Emotion: {emotion.emotion}"
+            )
+        print(
+            f"Intensity: {emotion.intensity}"
+            )
+        print(
+            f"Valence: {emotion.valence}"
+            )
+        print(
+            f"Arousal: {emotion.arousal}"
+            )
 
         # -----------------------------------------
         # Step 1 : Retrieve similar memories
@@ -63,7 +93,8 @@ class MemoryManager:
 
         retrieved = retrieve_memories(
             query=new_memory.content,
-            memories=self.memory_store.get_all()
+            memories=self.memory_store.get_all(),
+            emotion_store=self.emotion_store,
         )
 
         # -----------------------------------------
@@ -212,9 +243,11 @@ class MemoryManager:
                 updated = self.forgetting_manager.process_memory(
                     memory
                     )
-                print(
-                    f"Forgetting: {updated.content} -> {updated.status}"
-                    )
+                DEBUG = True
+                if DEBUG:
+                    print(
+                        f"Forgetting: {updated.content} -> {updated.status}"
+                        )
 
         # -----------------------------------------
         # Return Pipeline Result
