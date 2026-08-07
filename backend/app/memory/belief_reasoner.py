@@ -15,7 +15,15 @@ def reason_about_belief(
 ) -> dict:
     """
     Decide how a belief should evolve after
-    receiving a new memory.
+    receiving new evidence.
+
+    Supporting evidence:
+        - increases confidence
+        - marks belief as supported
+
+    Contradicting evidence:
+        - decreases confidence
+        - marks belief as contested
     """
 
     conflict = detect_belief_conflict(
@@ -31,13 +39,16 @@ def reason_about_belief(
     if conflict:
 
         action = "weaken"
+        state = "contested"
 
     else:
 
         action = "strengthen"
+        state = "supported"
 
     return {
         "action": action,
         "conflict": conflict,
         "new_confidence": new_confidence,
+        "state": state,
     }

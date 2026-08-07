@@ -23,10 +23,12 @@ class ReasoningManager:
         )
 
         belief.confidence = result["new_confidence"]
+        belief.state = result["state"]
 
         print(
             f"Reasoning: {result['action']} "
-            f"(confidence={belief.confidence:.2f})"
+            f"(confidence={belief.confidence:.2f}, "
+            f"state={belief.state})"
         )
 
         return belief

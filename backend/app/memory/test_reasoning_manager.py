@@ -6,6 +6,9 @@ from backend.app.memory.reasoning_manager import (
 )
 
 
+manager = ReasoningManager()
+
+
 belief = Belief(
     user_id="user_001",
     subject="Programming",
@@ -13,7 +16,8 @@ belief = Belief(
     confidence=0.75,
 )
 
-memory = Memory(
+
+supporting_memory = Memory(
     user_id="user_001",
     content="Python is my favorite language.",
     memory_type="fact",
@@ -22,21 +26,51 @@ memory = Memory(
     strength=0.8,
 )
 
-manager = ReasoningManager()
 
-updated = manager.process_reasoning(
-    belief,
-    memory,
+conflicting_memory = Memory(
+    user_id="user_001",
+    content="I don't like Python.",
+    memory_type="fact",
+    importance=0.9,
+    confidence=0.9,
+    strength=0.9,
 )
+
 
 print("\n==============================")
 print("REASONING MANAGER")
 print("==============================\n")
 
-print("Belief:")
-print(updated.belief)
 
-print()
+print("INITIAL BELIEF")
+print("Belief     :", belief.belief)
+print("Confidence :", belief.confidence)
+print("State      :", belief.state)
 
-print("Confidence:")
-print(updated.confidence)
+
+print("\n------------------------------")
+print("SUPPORTING EVIDENCE")
+print("------------------------------")
+
+updated = manager.process_reasoning(
+    belief,
+    supporting_memory,
+)
+
+print("Belief     :", updated.belief)
+print("Confidence :", updated.confidence)
+print("State      :", updated.state)
+
+
+print("\n------------------------------")
+print("CONFLICTING EVIDENCE")
+print("------------------------------")
+
+updated = manager.process_reasoning(
+    updated,
+    conflicting_memory,
+)
+
+print("Belief     :", updated.belief)
+print("Confidence :", updated.confidence)
+print("State      :", updated.state)
