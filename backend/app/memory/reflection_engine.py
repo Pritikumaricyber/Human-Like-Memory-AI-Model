@@ -5,7 +5,10 @@ from backend.app.models.belief import Belief
 from backend.app.memory.belief_builder import build_belief
 
 
-def reflect(memories: list[Memory]) -> list[Belief]:
+def reflect(
+    memories: list[Memory],
+    user_id: str = "1",
+) -> list[Belief]:
     """
     Reflection Engine
 
@@ -30,10 +33,10 @@ def reflect(memories: list[Memory]) -> list[Belief]:
     if keyword_counter["python"] >= 2:
 
         memory = Memory(
-            user_id="reflection",
+            user_id=user_id,
             content="User prefers Python.",
             memory_type="semantic",
-            importance=0.8
+            importance=0.8,
         )
 
         learned_beliefs.append(
@@ -47,10 +50,10 @@ def reflect(memories: list[Memory]) -> list[Belief]:
     if keyword_counter["ai"] >= 2:
 
         memory = Memory(
-            user_id="reflection",
+            user_id=user_id,
             content="User frequently works on AI.",
             memory_type="semantic",
-            importance=0.8
+            importance=0.8,
         )
 
         learned_beliefs.append(
@@ -64,10 +67,10 @@ def reflect(memories: list[Memory]) -> list[Belief]:
     if keyword_counter["javascript"] >= 2:
 
         memory = Memory(
-            user_id="reflection",
+            user_id=user_id,
             content="User prefers JavaScript.",
             memory_type="semantic",
-            importance=0.8
+            importance=0.8,
         )
 
         learned_beliefs.append(

@@ -58,7 +58,8 @@ new_memory = Memory(
 )
 
 manager = MemoryManager()
-#Sprint(type(manager.belief_store).__name__)
+
+manager.memory_store.clear()
 
 for memory in stored_memories:
     emotion = detect_emotion(

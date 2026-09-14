@@ -1,7 +1,8 @@
+.env
 venv/
 __pycache__/
 *.pyc
-.env
-.pytest_cache/
-.vscode/
-.idea/
+# Local backup files
+*.backup
+*.bak
+*_backup.py

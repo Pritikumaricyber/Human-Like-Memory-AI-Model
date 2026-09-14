@@ -4,49 +4,43 @@ from backend.app.models.belief import Belief
 from backend.app.models.evidence import Evidence
 
 
-def update_belief(belief: Belief, evidence: Evidence) -> Belief:
+def update_belief(
+    belief: Belief,
+    evidence: Evidence,
+    new_confidence: float | None = None,
+    new_state: str | None = None,
+) -> Belief:
     """
-    Update a belief based on new evidence.
+    Apply the result of belief reasoning to a belief.
 
-    This is the baseline rule-based updater.
-    It is intentionally simple for now.
-
-    Later, this will be replaced/improved
-    with our research-based belief update algorithm.
+    The reasoner decides how confidence and state should change.
+    This function applies that decision to the actual belief.
     """
 
-    evidence_strength = (
-        evidence.reliability
-        * evidence.specificity
-        * evidence.independence
-    )
+    # -------------------------------------------------
+    # Use reasoning result when provided
+    # -------------------------------------------------
 
-    # -----------------------------------------
-    # 1. SUPPORT
-    # -----------------------------------------
-    if evidence.relationship == "support":
-
-        increase = evidence_strength * 0.20
-
-        belief.confidence = min(
-            1.0,
-            belief.confidence + increase
-        )
-
-        if belief.confidence >= 0.70:
-            belief.state = "supported"
-
-    # -----------------------------------------
-    # 2. CONTRADICTION
-    # -----------------------------------------
-    elif evidence.relationship == "contradict":
-
-        decrease = evidence_strength * 0.20
+    if new_confidence is not None:
 
         belief.confidence = max(
             0.0,
-            belief.confidence - decrease
+            min(1.0, new_confidence)
         )
+
+    # -------------------------------------------------
+    # Apply new belief state
+    # -------------------------------------------------
+
+    if new_state is not None:
+
+        belief.state = new_state
+
+    # -------------------------------------------------
+    # Update currentness when evidence contradicts
+    # -------------------------------------------------
+
+    if evidence.relationship == "contradict":
 
         currentness_decrease = (
             evidence.reliability
@@ -59,61 +53,10 @@ def update_belief(belief: Belief, evidence: Evidence) -> Belief:
             belief.currentness - currentness_decrease
         )
 
-        if belief.confidence < 0.40:
-            belief.state = "weakened"
+    # -------------------------------------------------
+    # Update timestamp
+    # -------------------------------------------------
 
-        elif belief.confidence < 0.60:
-            belief.state = "contested"
-
-        else:
-            belief.state = "supported"
-
-    # -----------------------------------------
-    # 3. REFINEMENT
-    # -----------------------------------------
-    elif evidence.relationship == "refinement":
-
-        # Refinement does not strongly increase
-        # confidence. It makes the belief more specific.
-
-        increase = evidence_strength * 0.05
-
-        belief.confidence = min(
-            1.0,
-            belief.confidence + increase
-        )
-
-    # -----------------------------------------
-    # 4. DUPLICATE
-    # -----------------------------------------
-    elif evidence.relationship == "duplicate":
-
-        # Duplicate evidence should not artificially
-        # strengthen the belief.
-
-        pass
-
-    # -----------------------------------------
-    # 5. CONTEXT
-    # -----------------------------------------
-    elif evidence.relationship == "context":
-
-        # Context provides useful information but
-        # does not directly change belief confidence.
-
-        pass
-
-    # -----------------------------------------
-    # 6. UNRELATED
-    # -----------------------------------------
-    elif evidence.relationship == "unrelated":
-
-        # Completely unrelated evidence should have
-        # no effect on the belief.
-
-        pass
-
-    # Update timestamp whenever the belief is processed
     belief.updated_at = datetime.now()
 
     return belief

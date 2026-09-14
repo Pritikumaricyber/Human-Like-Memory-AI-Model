@@ -1,11 +1,16 @@
 from pydantic import BaseModel, Field
 from typing import Optional, Literal
 from datetime import datetime
+from uuid import uuid4
 
 
 class Evidence(BaseModel):
-    id: Optional[str] = None
+    id: str = Field(
+    default_factory=lambda: str(uuid4())
+)
     user_id: str
+
+    belief_id: Optional[str] = None
 
     content: str
 

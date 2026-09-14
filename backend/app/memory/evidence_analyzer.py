@@ -100,7 +100,7 @@ def classify_relationship(
         return "unrelated"
 
     if has_contradiction_signal:
-        return "contradiction"
+        return "contradict"
 
     if similarity >= 0.90:
         return "duplicate"
