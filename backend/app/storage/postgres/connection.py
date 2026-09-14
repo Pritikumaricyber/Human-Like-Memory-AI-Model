@@ -1,14 +1,19 @@
+import os
+
 import psycopg2
+from dotenv import load_dotenv
 
 
-DB_CONFIG = {
-    "dbname": "human_memory",
-    "user": "postgres",
-    "password": "Priti@3204",
-    "host": "localhost",
-    "port": "5432",
-}
+load_dotenv()
+
+
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 
 def get_connection():
-    return psycopg2.connect(**DB_CONFIG)
+    if not DATABASE_URL:
+        raise RuntimeError(
+            "DATABASE_URL environment variable is not configured."
+        )
+
+    return psycopg2.connect(DATABASE_URL)
