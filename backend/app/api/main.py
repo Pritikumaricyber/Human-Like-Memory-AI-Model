@@ -9,6 +9,7 @@ from backend.app.api.schemas import (
 from backend.app.llm.groq_provider import GroqProvider
 from backend.app.memory.memory_manager import MemoryManager
 from backend.app.llm.conversation_engine import ConversationEngine
+from backend.app.storage.postgres.schema import create_tables
 
 
 app = FastAPI(
@@ -27,6 +28,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Initialize PostgreSQL schema before loading the memory system
+create_tables()
 
 
 # Initialize the AI system once when the API starts
