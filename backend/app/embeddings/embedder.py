@@ -1,13 +1,16 @@
 from sentence_transformers import SentenceTransformer
 
+_model = None
 
-MODEL_NAME = "all-MiniLM-L6-v2"
 
-model = SentenceTransformer(MODEL_NAME)
+def get_model():
+    global _model
+
+    if _model is None:
+        _model = SentenceTransformer("all-MiniLM-L6-v2")
+
+    return _model
 
 
 def generate_embedding(text: str):
-    """
-    Convert text into a semantic vector.
-    """
-    return model.encode(text)
+    return get_model().encode(text)
