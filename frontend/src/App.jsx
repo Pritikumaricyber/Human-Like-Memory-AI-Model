@@ -1,6 +1,8 @@
 
 import { useEffect, useState } from "react";
 import "./App.css";
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -26,7 +28,7 @@ function App() {
   const loadMemories = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/memory-state/frontend_user"
+        `${API_BASE_URL}/memory-state/frontend_user`
       );
 
       if (!response.ok) {
@@ -45,7 +47,7 @@ function App() {
   const loadBehavioralProfile = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/behavioral-profile/frontend_user"
+        `${API_BASE_URL}/behavioral-profile/frontend_user`
       );
 
       if (!response.ok) {
@@ -96,7 +98,7 @@ function App() {
     ]);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/chat", {
+      const response = await fetch(`${API_BASE_URL}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
